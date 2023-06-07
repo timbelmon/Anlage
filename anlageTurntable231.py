@@ -1,8 +1,8 @@
 import time
 from pyModbusTCP.client import ModbusClient
 from pyModbusTCP.utils import test_bit
-from pyModbusTCP.utils import set_bit
-from pyModbusTCP.utils import reset_bit
+from anlageFunctions import setBitValue
+from anlageFunctions import updatePackage
 
 ip = "192.168.200.231"
 
@@ -32,13 +32,8 @@ turnTableSensorValues = {
 6: [False, "Prüfer ausgefahren (Teil okay)"]
 }
 
-def updatePackage(startRegister, amount):
-    regs_l = c.read_holding_registers(startRegister, amount)
-    for package in regs_l:
-        return package
-
 def updateTurnTableSensorValues(startRegister):
-    package = updatePackage(startRegister, 1)
+    package = updatePackage(c, startRegister, 1)
     for i in turnTableSensorValues:
         turnTableSensorValues[i][0] = test_bit(package, i)
         i+=1
@@ -56,43 +51,31 @@ def dumpTurnTableStatus():
             print(turnTableSensorValues[i][1])
         i+=1 
         
-def setValueTrue(register, bit):
-    regs_2 = c.read_holding_registers(register, 1)
-    for write_reg in regs_2:
-        write_reg = set_bit(write_reg, bit)
-        c.write_single_register(register, write_reg)
-    
-def setValueFalse(register, bit):
-    regs_2 = c.read_holding_registers(register, 1)
-    for write_reg in regs_2:
-        write_reg = reset_bit(write_reg, bit)
-        c.write_single_register(register, write_reg)
-        
 def ejectorA(mode): 
     if (mode == "on" or mode == "eject"):
-        setValueTrue(8003, 7)
+        setBitValue(True, c, 8003, 7)
         time.sleep(0.5)
     if (mode == "off" or mode == "eject"):
-        setValueFalse(8003, 7)
+        setBitValue(False, c, 8003, 7)
     
 def ejectorB(mode):
     if (mode == "on" or mode == "eject"):
-        setValueTrue(8003, 6)
+        setBitValue(True, c, 8003, 6)
         time.sleep(0.5)
     if (mode == "off" or mode == "eject"):
-        setValueFalse(8003, 6)
+        setBitValue(False, c, 8003, 6)
         
 def turnTurnTable():
-    setValueTrue(8003, 1)
+    setBitValue(True, c, 8003, 1)
     time.sleep(0.2)
-    setValueFalse(8003, 1)
+    setBitValue(False, c, 8003, 1)
     time.sleep(1) 
     
 def checkPart():
-    setValueTrue(8003, 5)
+    setBitValue(True, c, 8003, 5)
     time.sleep(0.2)
     updateTurnTableSensorValues(8001)
-    setValueFalse(8003, 5)
+    setBitValue(False, c, 8003, 5)
     time.sleep(0.2)
     if turnTableSensorValues[6][0] == True:
         return True
@@ -100,17 +83,17 @@ def checkPart():
         return False
     
 def borePart():
-    setValueTrue(8003, 4)
+    setBitValue(True, c, 8003, 4)
     time.sleep(0.2)
-    setValueTrue(8003, 0)
-    setValueTrue(8003, 2)
+    setBitValue(True, c, 8003, 0)
+    setBitValue(True, c, 8003, 2)
     time.sleep(0.5)
-    setValueFalse(8003, 2)
-    setValueTrue(8003, 3)
+    setBitValue(False, c, 8003, 2)
+    setBitValue(True, c, 8003, 3)
     time.sleep(0.5)
-    setValueFalse(8003, 3)
-    setValueFalse(8003, 0)
-    setValueFalse(8003, 4)
+    setBitValue(False, c, 8003, 3)
+    setBitValue(False, c, 8003, 0)
+    setBitValue(False, c, 8003, 4)
     
 
 partChecked = False
