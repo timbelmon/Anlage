@@ -2,7 +2,7 @@ import time
 from pyModbusTCP.client import ModbusClient
 from pyModbusTCP.utils import test_bit
 from anlageFunctions import setBitValue
-from anlageFunctions import updatePackage
+from anlageFunctions import getPackage
 
 ip = "192.168.200.232"
 
@@ -33,7 +33,7 @@ turnTableSensorValues = {
 }
 
 def updateTurnTableSensorValues(startRegister):
-    package = updatePackage(c, startRegister, 1)
+    package = getPackage(c, startRegister, 1)
     for i in turnTableSensorValues:
         turnTableSensorValues[i][0] = test_bit(package, i)
         i+=1

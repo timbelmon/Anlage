@@ -10,7 +10,7 @@ def setBitValue(value, c, register, bit):
             write_reg = reset_bit(write_reg, bit)
         c.write_single_register(register, write_reg)
 
-def updatePackage(c, startRegister, amount):
+def getPackage(c, startRegister, amount):
     regs_l = c.read_holding_registers(startRegister, amount)
     for package in regs_l:
-        return package
+        return package    
