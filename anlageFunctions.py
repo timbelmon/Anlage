@@ -122,7 +122,7 @@ while True:
     time.sleep(0.2)
     updateTurnTableSensorValues(8001)
     if turnTableSensorValues[0][0] == True: # position 1
-        time.sleep(1) #TODO Rausnehmen, nur für Demozwecke.
+        time.sleep(0.7) #TODO Rausnehmen, nur für Demozwecke.
         turn = True
     if turnTableSensorValues[1][0] == True: # position 3
         if partChecked == True:
