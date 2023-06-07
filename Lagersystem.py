@@ -67,3 +67,14 @@ Dec     Func
 
 
 """
+
+write_reg = 0
+
+while True:
+    write_reg = set_bit(write_reg, 15)
+    c.write_multiple_registers (384, [write_reg])
+   
+        
+
+
+   
