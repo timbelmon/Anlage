@@ -4,7 +4,7 @@ from pyModbusTCP.utils import test_bit
 from anlageFunctions import setBitValue
 from anlageFunctions import updatePackage
 
-ip = "192.168.200.231"
+ip = "192.168.200.233"
 
 
 # init modbus client
