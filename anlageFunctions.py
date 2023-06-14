@@ -12,5 +12,8 @@ def setBitValue(value, c, register, bit):
 
 def getPackage(c, startRegister, amount):
     regs_l = c.read_holding_registers(startRegister, amount)
-    for package in regs_l:
-        return package    
+    if amount == 1:
+        for package in regs_l:
+            return package
+    elif amount > 1:
+        return regs_l    
