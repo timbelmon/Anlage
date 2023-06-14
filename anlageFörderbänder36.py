@@ -3,10 +3,13 @@ from pyModbusTCP.client import ModbusClient
 from pyModbusTCP.utils import test_bit
 from anlageFunctions import setBitValue
 from anlageFunctions import getPackage
+from anlageFunctions import getBitValue
+
 
 ip = "192.168.200.236"
 # init modbus client
 c = ModbusClient(host=ip, port=502, unit_id=1,  auto_open=True)
+anlageTurntable231 = ModbusClient(host="192.168.200.231", port=502, unit_id=1,  auto_open=True)
 
 beltSensorData = {
     """Register, Front, Back"""
@@ -79,9 +82,15 @@ def setBelt(belt, dir):
         setBitValue(False, c, beltData[belt][0], beltData[belt][1])
         setBitValue(False, c, beltData[belt][0], beltData[belt][2])
         
-
+setBelt("G", "S")
 while True:
-    getBeltSensorData("G", "F")
-    time.sleep(1)
+    if (getBeltSensorData("G", "B") == True) and (getBitValue(anlageTurntable231, 8001, 5) == False):
+        setBelt("G", "S")
+    elif (getBeltSensorData("G", "B") == True) and (getBitValue(anlageTurntable231, 8001, 0) == True):
+        setBelt("G", "S")
+    elif (getBeltSensorData("G", "B") == True) and (getBitValue(anlageTurntable231, 8001, 0) == False):
+        setBelt("G", "F") 
+    elif getBeltSensorData("G", "F") or (getBeltSensorData("G", "B") == False and getBitValue(anlageTurntable231, 8001, 5) == True):
+        setBelt("G", "F")
 
 
