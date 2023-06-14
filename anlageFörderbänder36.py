@@ -31,14 +31,15 @@ beltSensorData = {
 def getBeltSensorData(belt, pos):
     belt = belt.upper()
     pos = pos.upper()
+    package = getPackage(c, beltSensorData[belt][0], 1)
 
     if pos == "F":  
-        if test_bit(c, beltSensorData[belt][0], beltSensorData[belt][1]) == 1:
+        if test_bit(package, beltSensorData[belt][1]) == 1:
             return True
         else:
             return False
     elif pos == "B":
-        if test_bit(c, beltSensorData[belt][0], beltSensorData[belt][2]) == 1:
+        if test_bit(package, beltSensorData[belt][2]) == 1:
             return True
         else:
             return False
@@ -77,5 +78,10 @@ def setBelt(belt, dir):
     elif (dir == "S"):
         setBitValue(False, c, beltData[belt][0], beltData[belt][1])
         setBitValue(False, c, beltData[belt][0], beltData[belt][2])
+        
+
+while True:
+    getBeltSensorData("G", "F")
+    time.sleep(1)
 
 
