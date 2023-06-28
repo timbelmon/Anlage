@@ -96,33 +96,6 @@ def borePart():
     setBitValue(False, c, 8003, 4)
     
 
-partChecked = False
-ejectPart = False
-
-while True:
-    turn = False
-
-    time.sleep(0.2)
-    updateTurnTableSensorValues(8001)
-    if turnTableSensorValues[0][0] == True: # position 1
-        time.sleep(0.7) #TODO Rausnehmen, nur für Demozwecke.
-        turn = True
-    if turnTableSensorValues[1][0] == True: # position 3
-        if partChecked == True:
-            borePart()
-        partChecked = False
-        ejectPart = True
-        turn = True
-    if turnTableSensorValues[2][0] == True: # position 2
-        turn = True
-        if (checkPart() == True):
-            partChecked = True
-    if (turn == True):
-        turnTurnTable()
-        if ejectPart == True:
-            ejectPart = False
-            ejectorB("eject")
-
     
     
     
