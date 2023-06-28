@@ -1,0 +1,31 @@
+import anlageTurnTableController
+import time
+
+anlageTurntable = anlageTurnTableController.AnlageController("192.168.200.234")
+
+partChecked = False
+ejectPart = False
+
+while True:
+    turn = False
+
+    time.sleep(0.2)
+    anlageTurntable.update_turn_table_sensor_values(8001)
+    if anlageTurntable.anlage_sensor_values[0][0] == True: # position 1
+        time.sleep(0.7) #TODO Rausnehmen, nur für Demozwecke.
+        turn = True
+    if anlageTurntable.anlage_sensor_values[1][0] == True: # position 3
+        if partChecked == True:
+            anlageTurntable.bore_part()
+        partChecked = False
+        ejectPart = True
+        turn = True
+    if anlageTurntable.anlage_sensor_values[2][0] == True: # position 2
+        turn = True
+        if (anlageTurntable.check_part() == True):
+            partChecked = True
+    if (turn == True):
+        anlageTurntable.turn_turn_table()
+        if ejectPart == True:
+            ejectPart = False
+            anlageTurntable.ejector_b("eject")

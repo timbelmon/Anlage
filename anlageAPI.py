@@ -1,8 +1,10 @@
 import socket
-import anlageTurntable231
+import anlageTurnTableController
+
+anlageTurntable = anlageTurnTableController.AnlageController("192.168.200.231")
 
 HOST = '0.0.0.0'  
-PORT = 1338
+PORT = 1337
 
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -25,18 +27,18 @@ while True:
             response = "Transmission received."
             if message == "ejectB": 
                 response = "Ejected part"
-                anlageTurntable231.ejectorB("eject")
+                anlageTurntable.ejector_b("eject")
             elif message == "ejectA": 
                 response = "Ejected part."
-                anlageTurntable231.ejectorA("eject")
+                anlageTurntable.ejector_a("eject")
             elif message == "turn": 
                 response = "Turned."
-                anlageTurntable231.turnTurnTable()
+                anlageTurntable.turn_turn_table()
             elif message == "borePart": 
                 response = "Bored part."
-                anlageTurntable231.borePart()
+                anlageTurntable.bore_part()
             elif message == "checkPart": 
-                if anlageTurntable231.checkPart() == True:
+                if anlageTurntable.check_part() == True:
                     response = "Part Check: True"
                 else:
                     response = "Part Check: False"
