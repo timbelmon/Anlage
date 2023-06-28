@@ -4,12 +4,13 @@ from pyModbusTCP.utils import test_bit
 
 def setBitValue(value, c, register, bit):
     regs_2 = c.read_holding_registers(register, 1)
-    for write_reg in regs_2:
-        if (value == True):
-            write_reg = set_bit(write_reg, bit)
-        elif (value == False):
-            write_reg = reset_bit(write_reg, bit)
-        c.write_single_register(register, write_reg)
+    if bool(regs_2):
+        for write_reg in regs_2:
+            if (value == True):
+                write_reg = set_bit(write_reg, bit)
+            elif (value == False):
+                write_reg = reset_bit(write_reg, bit)
+            c.write_single_register(register, write_reg)
         
 def getBitValue(c, register, bit):
     package = getPackage(c, register, 1)

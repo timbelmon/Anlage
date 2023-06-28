@@ -17,6 +17,13 @@ while True:
 
     client_socket, client_address = server_socket.accept()
     print("Connected to client:", client_address)
+    
+    client_socket.sendall("Bitte IP-Adresse eingeben.".encode())    
+    ip = client_socket.recv(1024).decode()
+    if ip != "":
+        anlageTurntable = anlageTurnTableController.AnlageController(ip)
+        print("Received IP-Adress:", ip)
+        client_socket.sendall("Verbunden.".encode())
 
     while True:
         message = client_socket.recv(1024).decode()
@@ -43,6 +50,6 @@ while True:
                 else:
                     response = "Part Check: False"
             client_socket.sendall(response.encode())
-        elif message == "/disconnect":
+        elif message == "/close":
             client_socket.close()
             server_socket.close()
