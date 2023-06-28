@@ -73,3 +73,31 @@ class AnlageController:
         setBitValue(False, self.c, 8003, 3)
         setBitValue(False, self.c, 8003, 0)
         setBitValue(False, self.c, 8003, 4)
+        
+    def default_behaviour(self):     
+        partChecked = False
+        ejectPart = False
+        
+        while True:
+            turn = False
+
+            time.sleep(0.2)
+            self.update_turn_table_sensor_values(8001)
+            if self.anlage_sensor_values[0][0] == True: # position 1
+                time.sleep(0.7) #TODO Rausnehmen, nur für Demozwecke.
+                turn = True
+            if self.anlage_sensor_values[1][0] == True: # position 3
+                if partChecked == True:
+                    self.bore_part()
+                partChecked = False
+                ejectPart = True
+                turn = True
+            if self.anlage_sensor_values[2][0] == True: # position 2
+                turn = True
+                if (self.check_part() == True):
+                    partChecked = True
+            if (turn == True):
+                self.turn_turn_table()
+                if ejectPart == True:
+                    ejectPart = False
+                    self.ejector_b("eject")
