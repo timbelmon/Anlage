@@ -1,10 +1,8 @@
 import socket
 import anlageTurnTableController
 
-anlageTurntable = anlageTurnTableController.AnlageController("192.168.200.231")
-
 HOST = '0.0.0.0'  
-PORT = 1337
+PORT = 1339
 
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -44,6 +42,12 @@ while True:
             elif message == "borePart": 
                 response = "Bored part."
                 anlageTurntable.bore_part()
+            elif message == "start":
+                respone = "Starting Default-Routine."
+                anlageTurntable.default_behaviour(True)
+            elif message == "stop":
+                respone = "Stopping Default-Routine."
+                anlageTurntable.default_behaviour(False)
             elif message == "checkPart": 
                 if anlageTurntable.check_part() == True:
                     response = "Part Check: True"

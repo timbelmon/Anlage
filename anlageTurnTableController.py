@@ -3,11 +3,13 @@ from pyModbusTCP.client import ModbusClient
 from pyModbusTCP.utils import test_bit
 from anlageFunctions import setBitValue
 from anlageFunctions import getPackage
+import threading
 
 class AnlageController:
     def __init__(self, ip):
         self.ip = ip
         self.c = ModbusClient(host=self.ip, port=502, unit_id=1, auto_open=True)
+        self.event = threading.Event()
         self.anlage_sensor_values = {
             0: [False, "Teil in Position 1"],
             1: [False, "Teil in Position 3 (Bohrer)"],
@@ -74,7 +76,8 @@ class AnlageController:
         setBitValue(False, self.c, 8003, 0)
         setBitValue(False, self.c, 8003, 4)
         
-    def default_behaviour(self):     
+        
+    def routine(self):
         partChecked = False
         ejectPart = False
         
@@ -100,4 +103,15 @@ class AnlageController:
                 self.turn_turn_table()
                 if ejectPart == True:
                     ejectPart = False
-                    self.ejector_b("eject")
+                    self.ejector_b("eject") 
+            if self.event.is_set():
+                break
+        
+    def default_behaviour(self, set):
+        t = threading.Thread(target=self.routine, args=[])
+        self.event.clear()
+        if set == True:
+            t.start()
+        elif set == False:
+            self.event.set()            
+        
