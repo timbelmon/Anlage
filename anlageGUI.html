@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Anlage Turn Table Controller</title>
+    <style>
+        /* Add your custom CSS styles here */
+    </style>
+    <script>
+        // Add your JavaScript code here
+    </script>
+</head>
+<body>
+    <h1>Anlage Turn Table Controller</h1>
+
+    <div id="status">Connecting...</div>
+
+    <div>
+        <label for="ipInput">IP Address:</label>
+        <input type="text" id="ipInput">
+        <button onclick="connect()">Connect</button>
+    </div>
+
+    <div>
+        <h2>Actions</h2>
+        <button onclick="sendCommand('ejectB')">Eject Part B</button>
+        <button onclick="sendCommand('ejectA')">Eject Part A</button>
+        <button onclick="sendCommand('turn')">Turn Table</button>
+        <button onclick="sendCommand('borePart')">Bore Part</button>
+        <button onclick="sendCommand('start')">Start Default Routine</button>
+        <button onclick="sendCommand('stop')">Stop Default Routine</button>
+        <button onclick="sendCommand('checkPart')">Check Part</button>
+    </div>
+
+    <div id="response"></div>
+
+    <script>
+        const socket = new WebSocket('ws://localhost:1339');
+
+        socket.onopen = function() {
+            document.getElementById('status').textContent = 'Connected';
+        };
+
+        socket.onmessage = function(event) {
+            document.getElementById('response').textContent = event.data;
+        };
+
+        function connect() {
+            const ip = document.getElementById('ipInput').value;
+            socket.send(ip);
+        }
+
+        function sendCommand(command) {
+            socket.send(command);
+        }
+    </script>
+</body>
+</html>
