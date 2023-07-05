@@ -10,7 +10,7 @@ server_socket.bind((HOST, PORT))
 
 server_socket.listen()
 
-wobject_dict = {}
+object_dict = {}
 
 while True:
     print("Server listening on {}:{}".format(HOST, PORT))
@@ -20,15 +20,16 @@ while True:
 
     client_socket.sendall("Bitte IP-Adresse eingeben.".encode())
     ip = client_socket.recv(1024).decode()
+    ip = ""
 
     if ip != "":
+        print("Received IP-Address:", ip)
         if ip in object_dict:
             anlageTurntable = object_dict[ip]
         else:
             anlageTurntable = anlageTurnTableController.AnlageController(ip)
             object_dict[ip] = anlageTurntable
 
-        print("Received IP-Address:", ip)
         client_socket.sendall("Verbunden.".encode())
 
 

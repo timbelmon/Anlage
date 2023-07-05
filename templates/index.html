@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Control Panel</title>
+  <style>
+    /* CSS styles for the GUI */
+    /* Add your own styles here */
+  </style>
+</head>
+<body>
+  <h1>Control Panel</h1>
+  <h2>IP: {{ ip }}</h2>
+  <div id="response">{{ response }}</div>
+  <form id="message-form" action="/{{ ip }}/send-message" method="post">
+    <button type="submit" name="message" value="ejectB" >Eject Part B</button>
+    <button type="submit" name="message" value="ejectA">Eject Part A</button>
+    <button type="submit" name="message" value="turn">Turn</button>
+    <button type="submit" name="message" value="borePart">Bore Part</button>
+    <button type="submit" name="message" value="start">Start Default-Routine</button>
+    <button type="submit" name="message" value="stop">Stop Default-Routine</button>
+    <button type="submit" name="message" value="checkPart">Check Part</button>
+  </form>
+</body>
+</html>

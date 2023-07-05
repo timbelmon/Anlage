@@ -1,5 +1,5 @@
 import threading
-import anlageTurnTableController
+import Anlage.anlageTurnTableController as anlageTurnTableController
 
 anlageTurntable231 = anlageTurnTableController.AnlageController("192.168.200.231")
 anlageTurntable232 = anlageTurnTableController.AnlageController("192.168.200.232")
